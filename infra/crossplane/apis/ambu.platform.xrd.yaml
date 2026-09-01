@@ -1,0 +1,57 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xambuplatforms.cloud.ambu.com
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  group: cloud.ambu.com
+  names:
+    kind: XAmbuPlatform
+    plural: xambuplatforms
+  claimNames:
+    kind: AmbuPlatform
+    plural: ambuplatforms
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required:
+                - parameters
+              properties:
+                parameters:
+                  type: object
+                  required:
+                    - location
+                    - resourceGroupName
+                    - namePrefix
+                  properties:
+                    location:
+                      type: string
+                      description: Azure region. Ambu default is northeurope.
+                      default: northeurope
+                    resourceGroupName:
+                      type: string
+                    namePrefix:
+                      type: string
+                      description: Short prefix for Key Vault (globally unique, 3-24 chars).
+                    tenantId:
+                      type: string
+                      description: Azure AD tenant ID for Key Vault.
+                    tags:
+                      type: object
+                      additionalProperties:
+                        type: string
+            status:
+              type: object
+              properties:
+                keyVaultName:
+                  type: string
+                logAnalyticsId:
+                  type: string

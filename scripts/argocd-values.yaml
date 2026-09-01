@@ -1,0 +1,18 @@
+configs:
+  params:
+    server.insecure: true
+  cm:
+    # Crossplane creates cluster-scoped XRs from claims; they must not be pruned or marked OutOfSync.
+    resource.exclusions: |
+      - apiGroups:
+        - cloud.ambu.com
+        kinds:
+        - XAmbuPlatform
+        clusters:
+        - "*"
+      - apiGroups:
+        - product.ambu.com
+        kinds:
+        - XEndoIntelligence
+        clusters:
+        - "*"

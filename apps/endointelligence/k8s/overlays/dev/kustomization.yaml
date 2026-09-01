@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: endointelligence-dev
+resources:
+  - ../../base
+replicas:
+  - name: endointelligence
+    count: 1
+patches:
+  - target:
+      kind: Ingress
+      name: endointelligence
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: endo-dev.ambu.local

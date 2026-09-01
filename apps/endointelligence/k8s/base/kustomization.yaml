@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - serviceaccount.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - networkpolicy.yaml
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: ambu-endointelligence
+    includeSelectors: false
+# Public image + ConfigMap HTML (no custom image or ACR).
+configMapGenerator:
+  - name: endointelligence-html
+    files:
+      - index.html
+      - styles.css
+  - name: endointelligence-nginx
+    files:
+      - default.conf
+images:
+  - name: nginxinc/nginx-unprivileged
+    newName: nginxinc/nginx-unprivileged
+    newTag: 1.27-alpine

@@ -1,0 +1,40 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: ambu-platform-northeurope
+  labels:
+    cloud.ambu.com/provider: azure
+    cloud.ambu.com/region: northeurope
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  compositeTypeRef:
+    apiVersion: cloud.ambu.com/v1alpha1
+    kind: XAmbuPlatform
+  resources:
+    # In-cluster marker so claims become Ready without Upbound Azure CRDs.
+    # Re-point these bases at azure.upbound.io ResourceGroup/Vault when providers install.
+    - name: platform-marker
+      base:
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          namespace: platform
+          labels:
+            cloud.ambu.com/composed: "true"
+        data:
+          substrate: aks-northeurope
+      patches:
+        - fromFieldPath: spec.claimRef.namespace
+          toFieldPath: metadata.namespace
+        - fromFieldPath: spec.parameters.resourceGroupName
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.parameters.location
+          toFieldPath: data.location
+        - fromFieldPath: spec.parameters.namePrefix
+          toFieldPath: data.namePrefix
+        - type: ToCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: status.keyVaultName
+      readinessChecks:
+        - type: None

@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: products
+  namespace: argocd
+spec:
+  description: Ambu product teams — EndoIntelligence and future apps
+  sourceRepos:
+    - "*"
+  destinations:
+    - namespace: endointelligence-dev
+      server: https://kubernetes.default.svc
+    - namespace: endointelligence-prod
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: "*"
+    - group: apps
+      kind: "*"
+    - group: networking.k8s.io
+      kind: "*"
+    - group: policy
+      kind: "*"
+    - group: autoscaling
+      kind: "*"

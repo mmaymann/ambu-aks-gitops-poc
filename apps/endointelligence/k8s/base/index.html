@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ambu EndoIntelligence · Autonomous platform PoC</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <div>
+        <strong>Ambu</strong>
+        <span>EndoIntelligence</span>
+      </div>
+    </div>
+    <nav>
+      <a href="#values">Principles</a>
+      <a href="#platform">Control plane</a>
+      <a href="#azure">On Azure</a>
+      <a href="#workflow">GitOps</a>
+    </nav>
+    <span class="pill">PoC · Kubernetes-native · northeurope</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Platform engineering · regulated medical devices · EU-hosted</p>
+      <h1>An autonomous infrastructure platform for EndoIntelligence — on Azure, not locked to Azure.</h1>
+      <p class="lede">
+        This page is served from AKS in North Europe, reconciled by Argo CD, with Azure
+        resources expressed as Kubernetes claims via Crossplane. Git is the control plane.
+        Azure is the current substrate — the same operating model works if a workload
+        later needs AWS or GCP.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="http://localhost:8081" target="_blank" rel="noopener noreferrer">See the control plane</a>
+        <a class="btn ghost" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Health check</a>
+      </div>
+    </section>
+
+    <section id="values" class="principles">
+      <h2>What this PoC is arguing for</h2>
+      <p class="intro">The Senior Cloud Architect role at Ambu calls for Azure depth, IaC, and GDPR / NIS2 / GxP. The missing piece is an <em>autonomous</em> platform: product teams request outcomes, the control plane converges continuously.</p>
+      <div class="grid">
+        <article>
+          <h3>Kubernetes-native</h3>
+          <p>Clusters, identities, and this app are Kubernetes APIs. Platform and product teams share one language — not a mix of portal clicks, Bicep modules, and ad-hoc scripts.</p>
+        </article>
+        <article>
+          <h3>GitOps</h3>
+          <p>Desired state lives in Git. Argo CD continuously reconciles. Drift is an event, not a surprise. The PR is the change-control record (GxP-shaped audit trail).</p>
+        </article>
+        <article>
+          <h3>Control planes</h3>
+          <p>Crossplane compositions turn “I need EndoIntelligence in prod” into ARM calls. Engineers file a claim; they do not become Azure specialists to ship a namespace.</p>
+        </article>
+        <article>
+          <h3>Autonomous infrastructure</h3>
+          <p>Self-heal in dev, tighter promotion in prod. The platform runs toward Git, 24/7 — the operating model of an Autonomous Infrastructure Platform, not a ticket queue.</p>
+        </article>
+        <article>
+          <h3>Cloud-agnostic core</h3>
+          <p>Azure is 99% of Ambu’s estate today — this cluster is AKS, Entra Workload Identity, North Europe. The <em>interface</em> is Kubernetes. Compositions can grow AWS/GCP providers without rewriting product repos.</p>
+        </article>
+        <article>
+          <h3>No vendor lock-in via Bicep</h3>
+          <p>Bicep/ARM describe Azure well and stay useful at the landing-zone edge. Binding every product pipeline to Bicep couples teams to one DSL. Git + Crossplane keeps Azure as a provider, not as the programming model.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="platform" class="stack">
+      <h2>Control plane on this cluster</h2>
+      <div class="grid three">
+        <article>
+          <h3>AKS</h3>
+          <p>Runtime in northeurope. OIDC issuer, Workload Identity, Azure CNI Overlay. EU data residency for a Danish manufacturer.</p>
+        </article>
+        <article>
+          <h3>Crossplane</h3>
+          <p>XRDs <code>AmbuPlatform</code> and <code>EndoIntelligence</code>. Claims, not tickets. ARM is still what Azure sees — Git is what humans review.</p>
+        </article>
+        <article>
+          <h3>Argo CD</h3>
+          <p>App-of-Apps: platform vs products. Same GitOps path a Cloud Engineer would operate day-to-day next to the architect.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="azure" class="workflow">
+      <h2>Azure-first, not Azure-only</h2>
+      <p class="intro">Ambu’s job description lists Terraform, Bicep, and ARM. This PoC does not discard them. It puts a Kubernetes control plane <em>in front</em> of Azure so the estate can stay Azure-centric without teaching every product team Bicep.</p>
+      <ol>
+        <li>Landing zones and hub networking can remain Terraform or Bicep — that is the architect’s blueprint.</li>
+        <li>The inner loop (identities, namespaces, this portal) is claimed and reconciled from Git.</li>
+        <li>If ZOOM AHEAD lands a workload on another cloud, the GitOps contract does not change; the provider does.</li>
+      </ol>
+    </section>
+
+    <section id="workflow" class="workflow">
+      <h2>From pull request to North Europe</h2>
+      <ol>
+        <li>Change the app or a Crossplane claim in Git.</li>
+        <li>Review maps to change control — who approved what, when.</li>
+        <li>Merge. Argo CD syncs. Crossplane talks to Azure Resource Manager if the claim changed.</li>
+        <li>This Nginx front door is the product surface: no patient data, architecture only.</li>
+      </ol>
+    </section>
+
+    <section id="status" class="status">
+      <h2>Runtime</h2>
+      <dl>
+        <div><dt>Application</dt><dd>Ambu EndoIntelligence</dd></div>
+        <div><dt>Control plane</dt><dd>Argo CD + Crossplane</dd></div>
+        <div><dt>Substrate</dt><dd>AKS · northeurope</dd></div>
+        <div><dt>Data class</dt><dd>demo-nonclinical</dd></div>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    Independent architecture PoC by Michael Maymann. Not affiliated with Ambu A/S. Do not process clinical data.
+    Source: github.com/mmaymann/ambu-aks-gitops-poc
+  </footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+apiVersion: product.ambu.com/v1alpha1
+kind: EndoIntelligence
+metadata:
+  name: endointelligence-dev
+  namespace: platform
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  compositionSelector:
+    matchLabels:
+      product.ambu.com/name: endointelligence
+  parameters:
+    location: northeurope
+    resourceGroupName: rg-ambu-platform-ne
+    environment: dev
+    identityName: id-endo-dev-ne
+    serviceAccountNamespace: endointelligence-dev
+    serviceAccountName: endointelligence
+    # Fill after bootstrap: az aks show -g rg-ambu-platform-ne -n aks-ambu-platform-ne --query oidcIssuerProfile.issuer -o tsv
+    aksOidcIssuer: "https://REPLACE_ME.oidc.prod-aks.azure.com/"
+---
+apiVersion: product.ambu.com/v1alpha1
+kind: EndoIntelligence
+metadata:
+  name: endointelligence-prod
+  namespace: platform
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  compositionSelector:
+    matchLabels:
+      product.ambu.com/name: endointelligence
+  parameters:
+    location: northeurope
+    resourceGroupName: rg-ambu-platform-ne
+    environment: prod
+    identityName: id-endo-prod-ne
+    serviceAccountNamespace: endointelligence-prod
+    serviceAccountName: endointelligence
+    aksOidcIssuer: "https://REPLACE_ME.oidc.prod-aks.azure.com/"

@@ -1,0 +1,22 @@
+apiVersion: cloud.ambu.com/v1alpha1
+kind: AmbuPlatform
+metadata:
+  name: ambu-platform
+  namespace: platform
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  compositionSelector:
+    matchLabels:
+      cloud.ambu.com/provider: azure
+      cloud.ambu.com/region: northeurope
+  parameters:
+    location: northeurope
+    resourceGroupName: rg-ambu-gitops-ne
+    namePrefix: ambu
+    tenantId: "00000000-0000-0000-0000-000000000000"
+    tags:
+      Owner: platform
+      CostCenter: endo-intelligence
+      DataClass: demo-nonclinical
+      Project: ambu-aks-gitops-poc

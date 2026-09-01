@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: endointelligence-prod
+resources:
+  - ../../base
+  - hpa-pdb.yaml
+replicas:
+  - name: endointelligence
+    count: 3
+patches:
+  - target:
+      kind: Ingress
+      name: endointelligence
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: endointelligence.ambu.local

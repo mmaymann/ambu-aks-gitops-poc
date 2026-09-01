@@ -1,0 +1,39 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: endointelligence-azure-identity
+  labels:
+    product.ambu.com/name: endointelligence
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  compositeTypeRef:
+    apiVersion: product.ambu.com/v1alpha1
+    kind: XEndoIntelligence
+  resources:
+    - name: identity-marker
+      base:
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          namespace: platform
+          labels:
+            product.ambu.com/composed: "true"
+        data:
+          kind: workload-identity-placeholder
+      patches:
+        - fromFieldPath: spec.claimRef.namespace
+          toFieldPath: metadata.namespace
+        - fromFieldPath: spec.parameters.identityName
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.parameters.environment
+          toFieldPath: data.environment
+        - fromFieldPath: spec.parameters.serviceAccountNamespace
+          toFieldPath: data.serviceAccountNamespace
+        - fromFieldPath: spec.parameters.aksOidcIssuer
+          toFieldPath: data.aksOidcIssuer
+        - type: ToCompositeFieldPath
+          fromFieldPath: spec.parameters.identityName
+          toFieldPath: status.identityClientId
+      readinessChecks:
+        - type: None

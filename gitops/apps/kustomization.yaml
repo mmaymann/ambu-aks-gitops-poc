@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: argocd
+resources:
+  - project-platform.yaml
+  - project-products.yaml
+  - platform-crossplane.yaml
+  - platform-crossplane-claims.yaml
+  - cluster-baseline.yaml
+  - ingress-nginx.yaml
+  - komoplane.yaml
+  - endointelligence-dev.yaml
+  - endointelligence-prod.yaml

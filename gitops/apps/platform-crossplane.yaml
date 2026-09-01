@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: platform-crossplane
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: platform
+  source:
+    repoURL: https://github.com/mmaymann/ambu-aks-gitops-poc.git
+    targetRevision: main
+    path: infra/crossplane
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: platform
+  ignoreDifferences:
+    - group: apiextensions.crossplane.io
+      kind: CompositeResourceDefinition
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/finalizers
+        - /spec/defaultCompositeDeletePolicy
+        - /spec/defaultCompositionUpdatePolicy
+    - group: apiextensions.crossplane.io
+      kind: Composition
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /spec
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
